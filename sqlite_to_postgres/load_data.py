@@ -1,20 +1,40 @@
+import os
 import sqlite3
 
 import psycopg2
-from psycopg2.extensions import connection as _connection
+from dotenv import find_dotenv, load_dotenv
+from psycopg2.extensions import connection as PGConnection
 from psycopg2.extras import DictCursor
 
+from utils.sqlite_extractor import SQLiteExtractor
+from utils.postgres_saver import PostgresSaver
 
-def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
+load_dotenv(find_dotenv('.env'))
+
+POSTGRES_DSL: dict = {
+    'dbname': os.getenv('POSTGRES_DB'),
+    'user': os.getenv('POSTGRES_USER'),
+    'password': os.getenv('POSTGRES_PASSWORD'),
+    'host': os.getenv('POSTGRES_HOST'),
+    'port': os.getenv('POSTGRES_PORT'),
+}
+
+
+def load_from_sqlite(
+    sqlite_connection: sqlite3.Connection,
+    pg_connection: PGConnection,
+) -> None:
     """Основной метод загрузки данных из SQLite в Postgres"""
-    # postgres_saver = PostgresSaver(pg_conn)
-    # sqlite_extractor = SQLiteExtractor(connection)
+    sqlite_extractor = SQLiteExtractor(sqlite_connection)
+    postgres_saver = PostgresSaver(pg_connection)
 
-    # data = sqlite_extractor.extract_movies()
-    # postgres_saver.save_all_data(data)
+    data = sqlite_extractor.extract_movies()
+    postgres_saver.save_all_data(data)
 
 
 if __name__ == '__main__':
-    dsl = {'dbname': 'movies_database', 'user': 'app', 'password': '123qwe', 'host': '127.0.0.1', 'port': 5432}
-    with sqlite3.connect('db.sqlite') as sqlite_conn, psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn:
+    with (
+        sqlite3.connect('db.sqlite') as sqlite_conn,
+        psycopg2.connect(**POSTGRES_DSL, cursor_factory=DictCursor) as pg_conn,
+    ):
         load_from_sqlite(sqlite_conn, pg_conn)

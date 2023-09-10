@@ -1,8 +1,7 @@
+from config.mixins import TimeStampedMixin, UUIDMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from config.mixins import TimeStampedMixin, UUIDMixin
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
@@ -99,16 +98,15 @@ class PersonFilmWork(UUIDMixin):
         verbose_name_plural = _('persons_film_works')
 
     class Roles(models.TextChoices):
-        ACTOR = 'ACT', _('actor')
-        ARTIST = 'ART', _('artist')
-        PRODUCER = 'PRD', _('producer')
-        DIRECTOR = 'DRC', _('director')
+        ACTOR = 'actor', _('actor')
+        PRODUCER = 'writer', _('writer')
+        DIRECTOR = 'director', _('director')
 
     created = models.DateTimeField(_('created'), auto_now_add=True)
     role = models.CharField(
         verbose_name=_('role'),
         choices=Roles.choices,
-        max_length=3,
+        max_length=64,
     )
     person = models.ForeignKey(
         to=Person,
