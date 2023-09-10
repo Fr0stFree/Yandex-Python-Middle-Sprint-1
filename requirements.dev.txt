@@ -1,3 +1,7 @@
+# debugging
+django-debug-toolbar==3.4.0
+
+# linters & formatters
 black==23.9.0
 flake8==6.1.0
 flake8-blind-except==0.2.1
