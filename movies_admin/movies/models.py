@@ -1,7 +1,8 @@
-from config.mixins import TimeStampedMixin, UUIDMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from config.mixins import TimeStampedMixin, UUIDMixin
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
@@ -11,7 +12,12 @@ class Genre(UUIDMixin, TimeStampedMixin):
         verbose_name_plural = _('genres')
 
     name = models.CharField(_('name'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
+    description = models.TextField(
+        blank=True,
+        null=True,
+        default='',
+        verbose_name=_('description'),
+    )
 
     def __str__(self):
         return self.name
@@ -25,7 +31,12 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
 
     title = models.CharField(_('title'), max_length=255)
     type = models.CharField(_('type'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
+    description = models.TextField(
+        verbose_name=_('description'),
+        blank=True,
+        null=True,
+        default='',
+    )
     creation_date = models.DateField(
         verbose_name=_('creation_date'),
         null=True,
