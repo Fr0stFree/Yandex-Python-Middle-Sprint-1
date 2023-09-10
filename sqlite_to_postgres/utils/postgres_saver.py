@@ -1,7 +1,7 @@
 from dataclasses import astuple
 import re
 
-from psycopg2.extensions import connection as PGConnection, cursor as PGCursor
+from psycopg2.extensions import connection as PGConnection
 
 from .schemas import Model
 from .utils import to_snake_case
@@ -16,8 +16,8 @@ class PostgresSaver:
         values = tuple(astuple(row) for row in data)
         index_pattern = re.compile(r'\((.*)\)')
         statement = f"""
-            SELECT indexdef 
-            FROM pg_indexes 
+            SELECT indexdef
+            FROM pg_indexes
             WHERE tablename = \'{table_name}\';
         """
 

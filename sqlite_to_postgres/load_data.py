@@ -45,4 +45,3 @@ if __name__ == '__main__':
         closing(psycopg2.connect(**POSTGRES_DSL)) as pg_connection,
     ):
         load_from_sqlite(sqlite_connection, pg_connection)
-

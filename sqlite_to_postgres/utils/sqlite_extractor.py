@@ -26,5 +26,3 @@ class SQLiteExtractor:
                 break
 
             yield tuple(model(*row) for row in chunk)
-
-
