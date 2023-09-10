@@ -1,8 +1,8 @@
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Genre, FilmWork, GenreFilmWork, Person, PersonFilmWork
+from .models import FilmWork, Genre, GenreFilmWork, Person, PersonFilmWork
 
 
 class GenreFilmWorkInline(admin.TabularInline):
@@ -52,4 +52,3 @@ class PersonAdmin(admin.ModelAdmin):
         return FilmWork.objects.filter(persons=obj).count()
 
     total_movies.short_description = _('total_movies_played_by_actor')
-

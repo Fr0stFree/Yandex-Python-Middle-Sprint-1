@@ -1,8 +1,10 @@
 [flake8]
-extend-ignore = E203
+extend-ignore = E203, A003, VNE003, CCE001
 exclude =
     .git,
     __pycache__,
+    migrations,
+    venv,
+    manage.py
 max-complexity = 10
 max-line-length = 79
-ignore = A003, VNE003
