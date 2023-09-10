@@ -1,6 +1,7 @@
+from config.components.common import DEBUG
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -8,3 +9,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')

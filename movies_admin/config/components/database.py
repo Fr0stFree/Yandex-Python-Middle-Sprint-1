@@ -1,8 +1,4 @@
-from dotenv import find_dotenv
-from environ import Env
-
-env = Env()
-env.read_env(env_file=find_dotenv('.env'))
+from config.components import env
 
 DATABASES = {
     'default': {

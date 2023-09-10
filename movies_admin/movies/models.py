@@ -14,7 +14,6 @@ class Genre(UUIDMixin, TimeStampedMixin):
     name = models.CharField(_('name'), max_length=255)
     description = models.TextField(
         blank=True,
-        null=True,
         default='',
         verbose_name=_('description'),
     )
@@ -34,7 +33,6 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     description = models.TextField(
         verbose_name=_('description'),
         blank=True,
-        null=True,
         default='',
     )
     creation_date = models.DateField(
@@ -104,7 +102,7 @@ class Person(UUIDMixin, TimeStampedMixin):
 class PersonFilmWork(UUIDMixin):
     class Meta:
         db_table = '"content"."person_film_work"'
-        unique_together = ('film_work_id', 'person_id')
+        unique_together = ('film_work_id', 'person_id', 'role')
         verbose_name = _('person_film_work')
         verbose_name_plural = _('persons_film_works')
 
