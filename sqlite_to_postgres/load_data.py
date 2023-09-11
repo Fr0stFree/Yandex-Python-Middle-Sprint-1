@@ -36,7 +36,6 @@ def load_from_sqlite(
     for model in (FilmWork, Person, Genre, GenreFilmWork, PersonFilmWork):
         for chunk in sqlite_extractor.extract_chunks(model, chunk_size=100):
             postgres_saver.save_data(chunk)
-            pg_connection.commit()
 
 
 if __name__ == '__main__':

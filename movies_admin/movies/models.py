@@ -56,7 +56,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     persons = models.ManyToManyField(
         to='Person',
         through='PersonFilmWork',
-        related_name='persons',
+        related_name='film_works',
         verbose_name=_('persons'),
     )
 

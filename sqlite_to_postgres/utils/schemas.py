@@ -1,7 +1,7 @@
 import uuid
 import datetime as dt
 from dataclasses import dataclass
-from typing import TypeVar, Type
+from typing import TypeVar, Type, TypeAlias
 
 
 @dataclass(frozen=True)
@@ -49,7 +49,7 @@ class PersonFilmWork:
     person_id: uuid.UUID
 
 
-Model = TypeVar(
+Model: TypeAlias = TypeVar(
     'Model',
     Type[FilmWork],
     Type[Genre],

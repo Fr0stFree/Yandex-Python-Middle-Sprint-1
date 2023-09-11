@@ -1,10 +1,11 @@
 from dataclasses import astuple
-import re
 
 from psycopg2.extensions import connection as PGConnection
 
+from psycopg2.extras import execute_batch
+
 from .schemas import Model
-from .utils import to_snake_case
+from .utils import to_snake_case, locate_table_indexes
 
 
 class PostgresSaver:
@@ -14,27 +15,15 @@ class PostgresSaver:
     def save_data(self, data: tuple[Model, ...]) -> None:
         table_name = to_snake_case(data[0].__class__.__name__)
         values = tuple(astuple(row) for row in data)
-        index_pattern = re.compile(r'\((.*)\)')
-        statement = f"""
-            SELECT indexdef
-            FROM pg_indexes
-            WHERE tablename = \'{table_name}\';
-        """
 
         with self._connection.cursor() as cursor:
-            cursor.execute(statement)
-            indexes_strings = cursor.fetchall()
-
-            indexes = [
-                index_pattern.search(index_string[0]).group(1).split(', ')
-                for index_string in indexes_strings
-            ]
-            indexes.sort(key=len, reverse=True)
-
+            indexes = locate_table_indexes(cursor, table_name)
             statement = f"""
                 INSERT INTO content.{table_name}
                 VALUES ({', '.join(['%s'] * len(values[0]))})
                 ON CONFLICT ({', '.join(indexes[0])}) DO NOTHING;
             """
 
-            cursor.executemany(statement, values)
+            execute_batch(cursor, statement, values, page_size=len(values))
+
+        self._connection.commit()
