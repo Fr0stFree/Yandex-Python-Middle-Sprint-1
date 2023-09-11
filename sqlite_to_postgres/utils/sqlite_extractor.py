@@ -21,8 +21,5 @@ class SQLiteExtractor:
 
         result = self._connection.execute(statement)
 
-        while True:
-            if not (chunk := result.fetchmany(chunk_size)):
-                break
-
+        while chunk := result.fetchmany(chunk_size):
             yield tuple(model(*row) for row in chunk)
